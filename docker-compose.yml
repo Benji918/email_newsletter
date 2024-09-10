@@ -1,0 +1,67 @@
+services:
+  web:
+    image: email_newsletter
+    container_name: Email_newsletter
+    build: .
+    ports:
+      - 8000:8000
+    volumes:
+      - ./:/app
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    
+    depends_on:
+      - postgres-db
+      - redis
+
+  postgres-db:
+    image: postgres:latest
+    container_name: my-postgres-container
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: examplepassword
+      POSTGRES_USER: exampleuser
+      POSTGRES_DB: exampledb
+    volumes:
+      - postgres_db_data:/var/lib/postgresql/data
+
+
+  redis:
+    image: redis:alpine
+    container_name: my-redis-container
+    restart: always
+  
+  celery:
+    build: .
+    container_name: my-celery-container
+    volumes:
+      - ./:/app
+    command: >
+      sh -c "celery -A email_newsletter.celery worker -l info" 
+    depends_on:
+      - redis
+      - web
+
+  flower:
+    build: .
+    container_name: my-flower-container
+    command: celery -A email_newsletter flower --basic_auth=admin:password123
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+
+  beat:
+    build: .
+    container_name: my-beat-container
+    command: celery -A email_newsletter beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - web
+
+
+volumes:
+  postgres_db_data:
