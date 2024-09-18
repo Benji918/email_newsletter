@@ -1,7 +1,7 @@
 services:
   web:
     image: email_newsletter
-    container_name: Email_newsletter
+    container_name: email_newsletter
     build: .
     ports:
       - 8000:8000
@@ -47,6 +47,8 @@ services:
     build: .
     container_name: my-flower-container
     command: celery -A email_newsletter flower --basic_auth=admin:password123
+    volumes:
+      - ./:/app
     ports:
       - "5555:5555"
     depends_on:
