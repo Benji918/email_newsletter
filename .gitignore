@@ -5,6 +5,11 @@ __pycache__/
 
 # C extensions
 *.so
+.env
+venv/
+email_newsletter/__pycache__/
+core/migrations/
+
 
 # Distribution / packaging
 .Python
