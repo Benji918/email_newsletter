@@ -6,4 +6,18 @@ from datetime import datetime
 
 @shared_task(name='email_newsletter')
 def send_newsletter():
-    pass
+    subject = "Your Monthly Newsletter"
+    
+    subscribers = MessageBoard.objects.get(id=1).subscribers.filter(
+        CustomUser__newsletter_subscribed=True,
+    )
+    
+    for subscriber in subscribers:
+        body = render_to_string('templates/newsletter.html', {'name': subscriber.CustomUser.username})
+        email = EmailMessage( subject, body, to=[subscriber.email] )
+        email.content_subtype = "html"
+        email.send()
+    
+    current_month = datetime.now().strftime('%B') 
+    subscriber_count = subscribers.count()   
+    return f'{current_month} Newsletter to {subscriber_count} subs'
