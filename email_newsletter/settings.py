@@ -12,9 +12,14 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
+import environ
+
+env = environ.Env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+# Take environment variables from .env file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -179,8 +184,12 @@ SPECTACULAR_SETTINGS = {
 BASE_BACKEND_URL = "http://localhost:8000"
 
 # EMAIL SETTINGS
-# EMAIL_HOST_USER = env('SENDER_EMAIL')
-# EMAIL_HOST_PASSWORD = env('SENDER_EMAIL_PASSWORD')
+EMAIL_HOST_USER = env('SENDER_EMAIL')
+EMAIL_HOST_PASSWORD = env('SENDER_EMAIL_PASSWORD')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Replace 'smtp.example.com' with your SMTP server hostname
+EMAIL_PORT = 587  # Replace '587' with your SMTP server port number
+EMAIL_USE_TLS = True  # Set it to 'True' if your SMTP server uses TLS encryption
 
 
 # Celery settings
