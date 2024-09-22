@@ -9,11 +9,11 @@ def send_newsletter():
     subject = "Your Monthly Newsletter"
     
     subscribers = MessageBoard.objects.get(id=1).subscribers.filter(
-        CustomUser__newsletter_subscribed=True,
+        newsletter_subscribed=True,
     )
     
     for subscriber in subscribers:
-        body = render_to_string('templates/newsletter.html', {'name': subscriber.CustomUser.username})
+        body = render_to_string('templates/newsletter.html', {'name': subscriber.username})
         email = EmailMessage( subject, body, to=[subscriber.email] )
         email.content_subtype = "html"
         email.send()

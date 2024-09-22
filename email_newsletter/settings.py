@@ -193,7 +193,7 @@ EMAIL_USE_TLS = True  # Set it to 'True' if your SMTP server uses TLS encryption
 
 
 # Celery settings
-CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT=['application/json']
 CELERY_RESULT_SERIALIZER='json'
 CELERY_TASK_SERIALIZER='json'
