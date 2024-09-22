@@ -72,7 +72,7 @@ ROOT_URLCONF = 'email_newsletter.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -187,9 +187,10 @@ BASE_BACKEND_URL = "http://localhost:8000"
 EMAIL_HOST_USER = env('SENDER_EMAIL')
 EMAIL_HOST_PASSWORD = env('SENDER_EMAIL_PASSWORD')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # Replace 'smtp.example.com' with your SMTP server hostname
-EMAIL_PORT = 587  # Replace '587' with your SMTP server port number
-EMAIL_USE_TLS = True  # Set it to 'True' if your SMTP server uses TLS encryption
+EMAIL_HOST = 'smtp.gmail.com' 
+EMAIL_PORT = 465 
+EMAIL_USE_TLS = False  
+EMAIL_USE_SSL = True
 
 
 # Celery settings
